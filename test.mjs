@@ -54,10 +54,9 @@ test('регистр, диакритика, сокращения и омоним
 test('полная форма слова вне словаря', () => {
   lookup('pāstor, pāstōris m', [['pastoris', 'consonant']], false);
   lookup('ovile, ovilis n', [['ovilis', 'vocalic']], false);
-  lookup('hostis, hostis m', [['hostis', 'mixedB']], false);
+  lookup('navis, navis f', [['navis', 'mixedB']], false);
   lookup('nox, noctis f', [['noctis', 'mixedA']], false);
   lookup('onyx, onychis m', [['onychis', 'consonant']], false);
-  lookup('anthelix, anthelicis f', [['anthelicis', 'consonant']], false);
   lookup('aqua, aquae f', [['aquae', 'other']], false);
   lookup('imber, imbris m', [['imbris', 'mixedA']], false);
 });
@@ -72,7 +71,7 @@ test('некорректные и неполные запросы', () => {
     ['nox', 'Нужна полная словарная форма'],
     ['nox, noctis', 'Нужна полная словарная форма'],
     ['nox, -ctis f', 'Нужна полная словарная форма'],
-    ['arbor, oris f', 'Нужна полная словарная форма'],
+    ['clamor, oris m', 'Нужна полная словарная форма'],
     ['aqua, dentis f', 'Нужна полная словарная форма'],
   ]) {
     assert.equal(searchWord(query).error, error, query);
@@ -80,11 +79,43 @@ test('некорректные и неполные запросы', () => {
 });
 
 test('во внешний поиск идут только незнакомые одиночные слова', () => {
-  assert.equal(searchWord(' ŪLCUS ').remote, 'ulcus');
-  assert.equal(searchWord('ulcus, ulceris n').remote, undefined);
-  assert.equal(searchWord('ulcus, ulceris').remote, null);
+  assert.equal(searchWord(' ŌNYX ').remote, 'onyx');
+  assert.equal(searchWord('onyx, onychis m').remote, undefined);
+  assert.equal(searchWord('onyx, onychis').remote, null);
+  assert.equal(searchWord('ulcus').remote, undefined);
   assert.equal(searchWord('foramen').remote, undefined);
   assert.equal(searchWord('не латынь').remote, undefined);
+});
+
+test('словарные формы из обоих учебников находятся без сети', () => {
+  lookup('anthelix, icis f', [['anthelicis', 'consonant']]);
+  lookup('Bronchītis, idis f', [['bronchitidis', 'consonant']]);
+  lookup('perionyx', [['perionychis', 'consonant']]);
+  lookup('raphe, es f', [['raphes', 'other']]);
+  lookup('asthma, atis n', [['asthmatis', 'consonant']]);
+  lookup('cochlear', [['cochlearis', 'vocalic']]);
+  lookup('metastasis', [['metastasis', 'mixedB']]);
+  lookup('pulvis, eris m', [['pulveris', 'consonant']]);
+  lookup('vulnus', [['vulneris', 'consonant']]);
+  assert.equal(searchWord('bronchitis').matches[0].source, 'Бондаренко, 2005');
+  assert.equal(searchWord('metastasis').matches[0].source, 'Чернявский и др., 1989');
+});
+
+test('тип склонения, исключение по роду и особые падежные формы не смешиваются', () => {
+  const result = query => classify(searchWord(query).matches[0]);
+  assert.equal(result('cor').kind, 'mixedA');
+  assert.match(result('cor').notes[0], /Исключение по роду.*средний.*мужской/);
+  assert.equal(result('pulvis').kind, 'consonant');
+  assert.match(result('pulvis').notes[0], /Исключение по роду.*мужской.*женский/);
+  assert.equal(result('salpinx').kind, 'exception');
+  assert.match(result('salpinx').steps.at(-1), /Бондаренко.*salpingum/);
+  assert.match(result('larynx').notes[0], /Исключение по роду/);
+  assert.match(result('vas').steps.at(-1), /vasorum/);
+  assert.equal(result('dosis').kind, 'mixedB');
+  assert.match(result('dosis').notes[0], /dosim.*dosi/);
+  assert.match(result('pelvis').notes[0], /pelvim.*pelvi/);
+  assert.equal(result('fauces, ium f').kind, 'plural');
+  assert.match(result('ile').notes[0], /ilium/);
 });
 
 test('каждая встроенная форма находится и разбирается однозначно', () => {

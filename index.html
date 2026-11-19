@@ -217,6 +217,7 @@
     .guide ul { padding-inline-start: 1.375rem; margin: .5rem 0 .75rem; }
     .guide li + li { margin-top: .375rem; }
     .guide strong { color: var(--ink); }
+    .credit { padding-block: .25rem 1.5rem; color: var(--muted); font-size: .875rem; }
 
     @media (min-width: 34rem) {
       .search { grid-template-columns: minmax(0, 1fr) auto; }
@@ -298,14 +299,15 @@
             <li><strong>Гласный:</strong> средний род, Nom. sing. на <i lang="la">-e, -al, -ar</i>.</li>
             <li><strong>Смешанный Б:</strong> если не гласный, проверьте, одинаково ли число слогов и оканчивается ли Nom. sing. на <i lang="la">-is</i> или <i lang="la">-es</i>.</li>
             <li><strong>Согласный или смешанный А:</strong> в остальных случаях смотрите на основу. Одна согласная в конце — согласный, две или больше — смешанный А.</li>
-            <li><strong>Исключение:</strong> у некоторых слов форма не совпадает с ожидаемой. Например, в учебнике Чернявского для <i lang="la">larynx</i> указано окончание <i lang="la">-um</i>, хотя основа заканчивается на <i lang="la">-ng</i>.</li>
+            <li><strong>Исключение:</strong> у некоторых слов форма не совпадает с ожидаемой. Например, у Бондаренко <i lang="la">larynx</i> имеет окончание <i lang="la">-um</i> в Gen. pl., хотя основа заканчивается на <i lang="la">-ng</i>.</li>
           </ul>
-          <p>А и Б обозначены как в учебном примере. Здесь отмечены исключения по склонению, а не по роду. Для незнакомых слов разбор по правилу не заменяет проверку по словарю.</p>
-          <p class="hint">Источники: <a href="https://dmitrygrachov.github.io/Libra/#how">учебная схема А/Б</a>, <a href="https://studfile.net/preview/21458643/page:16/">Чернявский, § 101</a>, <a href="https://studfile.net/preview/535623/">Плитниченко и Бондаренко</a>, <a href="https://dcc.dickinson.edu/grammar/latin/3rd-declension-summary-i-stem-forms">Allen &amp; Greenough, § 78</a>.</p>
+          <p>Исключения по роду указаны отдельно: необычный род сам по себе не меняет тип склонения. Для незнакомых слов разбор по правилу не заменяет проверку по словарю.</p>
+          <p class="hint">Источники: <a href="https://tsutula.bookonlime.ru/reader/book/2014042916543273126900001395">Бондаренко, 2005</a> (с. 31–41, 51–52, 81–84, 141–142, словарь с с. 235); Чернявский и др., 1989 (§ 118, словарь с с. 307); <a href="https://dmitrygrachov.github.io/Libra/#how">схема А/Б</a>; <a href="https://dcc.dickinson.edu/grammar/latin/3rd-declension-summary-i-stem-forms">Allen &amp; Greenough, § 78</a>.</p>
         </div>
       </details>
     </div>
   </main>
+  <footer class="wrap credit">Сделал Расим Мусаев</footer>
 
   <script>
     // A study selection, not the complete vocabulary of either textbook.
@@ -502,17 +504,271 @@ vomer vomeris m сошник
 vox vocis f голос
 zygoma zygomatis n скуловая кость`;
 
+    const textbookLexicons = {
+      "Бондаренко, 2005": `
+adhesio adhesionis f сращение
+adipositas adipositatis f ожирение
+agger aggeris m валик
+anastomosis anastomosis f анастомоз
+anthelix anthelicis f противозавиток ушной раковины
+appendicitis appendicitidis f аппендицит
+arbor arboris f дерево
+arrector arrectoris m мышца, поднимающая волос
+arthrosis arthrosis f артроз
+ascaridosis ascaridosis f аскаридоз
+associatio associationis f ассоциация
+amyloidosis amyloidosis f амилоидоз
+bregma bregmatis n брегма
+bronchitis bronchitidis f бронхит
+buccinator buccinatoris m щёчная мышца
+carotis carotidis f сонная артерия
+chole choles f жёлчь
+chondroma chondromatis n хондрома
+cicatrix cicatricis f рубец
+clitoris clitoridis f клитор
+confluens confluentis m сток
+corrugator corrugatoris m сморщивающая мышца
+cremaster cremasteris m мышца, поднимающая яичко
+crux crucis f крест, перекрёст
+culmen culminis n вершина
+decussatio decussationis f перекрёст
+dermis dermis f дерма
+detrusor detrusoris m выталкивающая мышца
+diaphysis diaphysis f диафиз
+diastema diastematis n промежуток, диастема
+dilatator dilatatoris m расширяющая мышца
+divisio divisionis f разделение
+empyema empyematis n эмпиема
+encephalitis encephalitidis f энцефалит
+epididymis epididymidis f придаток яичка
+epiphysis epiphysis f эпифиз
+erector erectoris m выпрямляющая мышца
+excavatio excavationis f углубление
+fibroma fibromatis n фиброма
+fibromatosis fibromatosis f фиброматоз
+fibrosis fibrosis f фиброз
+formatio formationis f образование, формация
+gomphosis gomphosis f вколачивание; соединение зуба с альвеолой
+granulatio granulationis f грануляция
+haematoma haematomatis n гематома
+helicotrema helicotrematis n геликотрема, отверстие улитки
+helix helicis f завиток ушной раковины
+helminthiasis helminthiasis f гельминтоз
+hepatitis hepatitidis f гепатит
+hepatosis hepatosis f гепатоз
+hymen hymenis m девственная плева
+hypothenar hypothenaris n возвышение мизинца
+iliopsoas iliopsoatis m подвздошно-поясничная мышца
+inclinatio inclinationis f наклон
+insertio insertionis f прикрепление
+intersectio intersectionis f перемычка
+lambliosis lambliosis f лямблиоз
+lanugo lanuginis f пушковые волосы
+leucocytosis leucocytosis f лейкоцитоз
+leucosis leucosis f лейкоз
+lipoma lipomatis n липома
+masticator masticatoris m жевательная мышца
+matrix matricis f матрикс, ложе
+mesoappendix mesoappendicis f брыжейка червеобразного отростка
+mesosalpinx mesosalpingis f брыжейка маточной трубы
+metaphysis metaphysis f метафиз
+murmur murmuris n шум, журчание
+myelitis myelitidis f миелит
+myoma myomatis n миома
+neocortex neocorticis m новая кора
+nephritis nephritidis f нефрит
+nephroma nephromatis n нефрома
+neurohypophysis neurohypophysis f нейрогипофиз
+obex obicis m задвижка
+osteoma osteomatis n остеома
+osteomyelitis osteomyelitidis f остеомиелит
+paracervix paracervicis f околошеечная клетчатка
+paradidymis paradidymidis f привесок придатка яичка
+parenchyma parenchymatis n паренхима
+parotis parotidis f околоушная железа
+perionyx perionychis m край ногтевого ложа
+platysma platysmatis n подкожная мышца шеи
+portio portionis f часть
+prechiasma prechiasmatis n предперекрёст
+projectio projectionis f проекция
+pronator pronatoris m пронатор
+psoas psoatis m поясничная мышца
+putamen putaminis n скорлупа
+pyelonephritis pyelonephritidis f пиелонефрит
+radiatio radiationis f лучистость
+raphe raphes f шов
+rhinitis rhinitidis f ринит
+rotator rotatoris m мышца-вращатель
+salpinx salpingis f маточная труба
+schindylesis schindylesis f схиндилез, соединение кости в пазу другой
+sclerosis sclerosis f склероз
+sectio sectionis f разрез
+sector sectoris m сектор
+semicanalis semicanalis m полуканал
+siderosis siderosis f сидероз
+splen splenis m селезёнка
+spondylosis spondylosis f спондилёз
+stenosis stenosis f стеноз
+supinator supinatoris m супинатор
+syndesmosis syndesmosis f синдесмоз
+syndroma syndromatis n синдром
+tensor tensoris m напрягатель
+terminatio terminationis f окончание
+thrombocytosis thrombocytosis f тромбоцитоз
+toxicosis toxicosis f токсикоз
+umbo umbonis m выступ, пупок
+vermis vermis m червь
+vortex vorticis m вихрь, завиток`,
+      "Чернявский и др., 1989": `
+ablatio ablationis f удаление, абляция
+aetas aetatis f возраст
+aether aetheris m эфир
+actio actionis f действие
+albumen albuminis n белок
+alcohol alcoholis n алкоголь
+alumen aluminis n квасцы
+amputatio amputationis f ампутация
+aneurysma aneurysmatis n аневризма
+ankylosis ankylosis f анкилоз
+anthrax anthracis m сибирская язва
+arsenis arsenitis m арсенит
+asperitas asperitatis f шероховатость
+asthma asthmatis n астма
+auscultatio auscultationis f выслушивание, аускультация
+benzoas benzoatis m бензоат
+bubo bubonis m бубон
+calcificatio calcificationis f обызвествление
+calor caloris m жар
+carbo carbonis m уголь
+carbonas carbonatis m карбонат
+carcinoma carcinomatis n карцинома
+cirrhosis cirrhosis f цирроз
+citras citratis m цитрат
+claudicatio claudicationis f хромота
+coagulatio coagulationis f свёртывание
+cochlear cochlearis n ложка
+color coloris m цвет, окраска
+coma comatis n кома
+commotio commotionis f сотрясение
+constrictio constrictionis f сужение, сжатие
+contractio contractionis f сокращение
+contusio contusionis f ушиб
+curatio curationis f лечение
+dilatatio dilatationis f расширение
+embryo embryonis m зародыш
+emphysema emphysematis n эмфизема
+eruptio eruptionis f высыпание
+exemplar exemplaris n образец
+exstirpatio exstirpationis f полное удаление
+extensio extensionis f разгибание
+extractio extractionis f извлечение
+finis finis m конец, предел
+foetor foetoris m зловоние
+functio functionis f функция
+gens gentis f народ, род
+glaucoma glaucomatis n глаукома
+gluconas gluconatis m глюконат
+glycerophosphas glycerophosphatis m глицерофосфат
+gramma grammatis n грамм
+graviditas graviditatis f беременность
+hirudo hirudinis f пиявка
+hostis hostis m враг
+hydrotartras hydrotartratis m гидротартрат
+ignis ignis m огонь
+impetigo impetiginis f импетиго
+incarceratio incarcerationis f ущемление
+indicatio indicationis f показание
+inflammatio inflammationis f воспаление
+inhalatio inhalationis f ингаляция
+injectio injectionis f инъекция
+integritas integritatis f целостность
+invaginatio invaginationis f инвагинация
+juventus juventutis f молодость
+lactas lactatis m лактат
+latitudo latitudinis f ширина
+lumbago lumbaginis f люмбаго, прострел
+lux lucis f свет
+metastasis metastasis f метастаз
+mucilago mucilaginis f слизь, лекарственная форма
+mutatio mutationis f изменение, мутация
+narcosis narcosis f наркоз
+necrosis necrosis f некроз
+nitras nitratis m нитрат
+nitris nitritis m нитрит
+obliteratio obliterationis f облитерация, закрытие просвета
+observatio observationis f наблюдение
+odor odoris m запах
+operatio operationis f операция
+opus operis n работа
+orotas orotatis m оротат
+ossificatio ossificationis f окостенение
+palpatio palpationis f пальпация
+paralysis paralysis f паралич
+paresis paresis f парез
+percussio percussionis f перкуссия
+perforatio perforationis f прободение
+pestis pestis f чума
+phosphas phosphatis m фосфат
+plasma plasmatis n плазма
+poples poplitis m подколенная область
+praxis praxis f практика
+pronatio pronationis f пронация
+prophylaxis prophylaxis f профилактика
+propionas propionatis m пропионат
+prurigo pruriginis f почесуха
+pulvis pulveris m порошок
+punctio punctionis f пункция
+quies quietis f покой
+reactio reactionis f реакция
+reanimatio reanimationis f реанимация
+refractio refractionis f рефракция
+resectio resectionis f резекция
+restitutio restitutionis f восстановление
+rhizoma rhizomatis n корневище
+rubor ruboris m покраснение
+salicylas salicylatis m салицилат
+sanatio sanationis f оздоровление
+sanitas sanitatis f здоровье
+sapo saponis m мыло
+sarcoma sarcomatis n саркома
+senectus senectutis f старость
+sinciput sincipitis n передняя часть головы
+solutio solutionis f раствор
+sphincter sphincteris m сфинктер
+sterilitas sterilitatis f бесплодие
+stigma stigmatis n рыльце
+stupor stuporis m ступор
+subcarbonas subcarbonatis m основной карбонат
+subnitras subnitratis m основной нитрат
+sulfas sulfatis m сульфат
+sulfur sulfuris n сера
+symptoma symptomatis n симптом
+thermopsis thermopsidis f термопсис
+thiosulfas thiosulfatis m тиосульфат
+transfusio transfusionis f переливание
+transplantatio transplantationis f трансплантация
+trauma traumatis n травма
+tremor tremoris m дрожание, тремор
+tumor tumoris m опухоль, припухлость
+ulcus ulceris n язва
+viride viridis n зелень
+visio visionis f зрение
+vulnus vulneris n рана`,
+    };
+
     const otherDeclensions = new Map(Object.entries({
-      arcus: "IV", collum: "II", ductus: "IV", facies: "V", fascia: "I", genu: "IV",
+      arcus: "IV", chole: "I", collum: "II", ductus: "IV", facies: "V", fascia: "I", genu: "IV",
       manus: "IV", musculus: "II", oculus: "II", plexus: "IV", rosa: "I", series: "V",
-      spina: "I", sulcus: "II", vena: "I",
+      raphe: "I", spina: "I", sulcus: "II", vena: "I",
     }));
 
-    for (const row of lexicon.trim().split("\n")) {
-      const [, nom, gen, gender, meaning] = row.match(/^(\w+) (\w+) (\w+) (.+)$/);
-      const entry = { nom, gen, gender, meaning, declension: otherDeclensions.get(nom) ?? "III" };
-      if (!dictionary.has(nom)) dictionary.set(nom, []);
-      dictionary.get(nom).push(entry);
+    for (const [source, list] of [["", lexicon], ...Object.entries(textbookLexicons)]) {
+      for (const row of list.trim().split("\n")) {
+        const [, nom, gen, gender, meaning] = row.match(/^(\w+) (\w+) (\w+) (.+)$/);
+        const entry = { nom, gen, gender, meaning, source, declension: otherDeclensions.get(nom) ?? "III" };
+        if (!dictionary.has(nom)) dictionary.set(nom, []);
+        dictionary.get(nom).push(entry);
+      }
     }
 
     const types = {
@@ -527,27 +783,40 @@ zygoma zygomatis n скуловая кость`;
     };
     const genderNames = { m: "мужской", f: "женский", n: "средний", mf: "мужской / женский" };
 
-    // These are exceptions to the declension rules, not to gender rules.
-    const exceptions = new Map(Object.entries({
+    const declensionExceptions = new Map(Object.entries({
       "canis/canis": "Хотя формы равносложные и Nom. sing. на -is, в Gen. pl. — canum (согласный тип).",
       "caro/carnis": "Формы равносложные, но Nom. sing. не на -is/-es. В Gen. pl. встречаются carnum и carnium.",
       "frater/fratris": "Формы равносложные и основа на две согласные, но в Gen. pl. — fratrum (согласный тип).",
       "gaster/gastris": "Формы равносложные и основа на две согласные. В анатомической латыни Gen. pl. — gastrum.",
-      "hepar/hepatis": "Хотя hepar среднего рода и оканчивается на -ar, в Gen. pl. — hepatum (согласный тип).",
+      "hepar/hepatis": "Хотя hepar среднего рода и оканчивается на -ar, его Gen. sing. на -atis, а не на -aris (Бондаренко, с. 39). Gen. pl. — hepatum: согласный тип.",
       "iuvenis/iuvenis": "Хотя формы равносложные и Nom. sing. на -is, в Gen. pl. — iuvenum (согласный тип).",
       "juvenis/juvenis": "Хотя формы равносложные и Nom. sing. на -is, в Gen. pl. — juvenum (согласный тип).",
-      "larynx/laryngis": "Хотя основа laryng- оканчивается на -ng, по Чернявскому это греческое слово имеет окончание -um в Gen. pl.: laryngum.",
       "mater/matris": "Формы равносложные и основа на две согласные, но в Gen. pl. — matrum (согласный тип).",
-      "meninx/meningis": "Хотя основа mening- оканчивается на -ng, по Чернявскому это греческое слово имеет окончание -um в Gen. pl.: meningum.",
       "mensis/mensis": "По общему правилу это смешанный Б: mensium. В классической латыни встречается и mensum.",
       "pater/patris": "Формы равносложные и основа на две согласные, но в Gen. pl. — patrum (согласный тип).",
-      "phalanx/phalangis": "Хотя основа phalang- оканчивается на -ng, по Чернявскому это греческое слово имеет окончание -um в Gen. pl.: phalangum.",
-      "pharynx/pharyngis": "Хотя основа pharyng- оканчивается на -ng, по Чернявскому это греческое слово имеет окончание -um в Gen. pl.: pharyngum.",
       "sedes/sedis": "Хотя формы равносложные и Nom. sing. на -es, в классической латыни обычна форма sedum в Gen. pl.",
       "senex/senis": "Формы равносложные, но Gen. pl. имеет окончание согласного типа: senum.",
-      "vas/vasis": "В единственном числе III склонение, во множественном — II: Nom. pl. vasa, Gen. pl. vasorum.",
+      "vas/vasis": "В единственном числе III склонение, во множественном — II: Nom. pl. vasa, Gen. pl. vasorum (Бондаренко, с. 51; Чернявский, с. 125).",
       "venter/ventris": "Формы равносложные, хотя основа оканчивается на две согласные. В Gen. pl. встречаются ventrum и ventrium.",
     }));
+    // Bondarenko, p. 52: Greek nouns in -nx / -ngis use -um in Gen. pl.
+    const greekNg = new Set([
+      "larynx/laryngis", "meninx/meningis", "pharynx/pharyngis", "phalanx/phalangis",
+      "salpinx/salpingis", "mesosalpinx/mesosalpingis",
+    ]);
+    // Gender exceptions are independent of the declension variety (pp. 32–41).
+    const usualGenders = new Map([
+      ["m", "arbor cadaver cor gaster mater os quies tuber"],
+      ["f", "atlas axis calix calyx canalis coccyx dens finis fornix hallux larynx margo mons pancreas penis pharynx pons psoas pulvis sanguis tendo testis thorax unguis vas vermis"],
+      ["n", "hymen lien ren splen"],
+    ].flatMap(([gender, words]) => words.split(" ").map(word => [word, gender])));
+    const specialSingular = new Set(`
+      amyloidosis anamnesis analysis anastomosis ankylosis arthrosis ascaridosis basis cirrhosis crisis
+      diagnosis diaphysis dosis epiphysis febris fibromatosis fibrosis gomphosis helminthiasis hepatosis
+      hypophysis lambliosis leucocytosis leucosis metaphysis metastasis narcosis necrosis paralysis
+      paresis pelvis praxis prognosis prophylaxis schindylesis sclerosis siderosis spondylosis
+      stenosis symphysis synchondrosis syndesmosis thrombocytosis toxicosis tussis
+    `.trim().split(/\s+/));
     const pronunciation = new Map([["aer", "aër"], ["aeris", "aëris"]]);
 
     function normalize(value) {
@@ -564,7 +833,7 @@ zygoma zygomatis n скуловая кость`;
 
     function classify({ nom, gen, gender, declension = "III", rawNom = nom, rawGen = gen }) {
       if (nom === "fauces" && gen === "faucium") {
-        return { kind: "plural", steps: ["Fauces — форма Nom. pl., а faucium — Gen. pl. У этого слова в данном значении нет единственного числа."] };
+        return { kind: "plural", steps: ["Fauces — форма Nom. pl., а faucium — Gen. pl. Слово «зев» употребляется только во множественном числе (Бондаренко, с. 52)."] };
       }
       if (declension !== "III" || !gen.endsWith("is")) {
         const known = declension !== "III";
@@ -614,12 +883,27 @@ zygoma zygomatis n скуловая кость`;
           }
         }
       }
-      const exception = exceptions.get(`${nom}/${gen}`);
+      const key = `${nom}/${gen}`;
+      const exception = declensionExceptions.get(key) ?? (greekNg.has(key)
+        ? `Для греческих слов на -nx/-ngis Бондаренко (с. 52) даёт Gen. pl. с -um: ${stem}um. Здесь окончания согласного типа.`
+        : null);
       if (exception) {
         steps.push(`Исключение из правила. ${exception}`);
         kind = "exception";
       }
-      return { kind, stem, steps };
+
+      const notes = [];
+      const usualGender = usualGenders.get(nom);
+      if (usualGender) {
+        notes.push(`Исключение по роду: словарный род — ${genderNames[gender]}, по общему признаку ожидался бы ${genderNames[usualGender]} (Бондаренко, с. 32–41).`);
+      }
+      if (kind === "mixedB" && specialSingular.has(nom)) {
+        notes.push(`Особые формы единственного числа: Acc. — ${stem}im, Abl. — ${stem}i (Бондаренко, с. 141–142).`);
+      }
+      if (nom === "ile" && gen === "ilis") {
+        notes.push("У слова ile форма Gen. pl. — ilium. Она встречается в учебном примере os ilium (Бондаренко, с. 52).");
+      }
+      return { kind, stem, steps, notes };
     }
 
     function searchWord(value) {
@@ -778,6 +1062,7 @@ zygoma zygomatis n скуловая кость`;
       const reason = element("ol", "", "reason");
       for (const step of result.steps) reason.append(element("li", step));
       card.append(facts, reason);
+      for (const note of result.notes ?? []) card.append(element("p", note, "result-note"));
       if (entry.source === "wiktionary") {
         const note = element("p", "Словарная форма: ", "result-note");
         const source = element("a", "Wiktionary");
@@ -786,6 +1071,8 @@ zygoma zygomatis n скуловая кость`;
         source.rel = "noopener noreferrer";
         note.append(source, ". Тип определён по учебным правилам; источник не проверяет исключения по этой схеме.");
         card.append(note);
+      } else if (entry.source) {
+        card.append(element("p", `Источник словарной формы: ${entry.source}.`, "result-note"));
       } else if (!fromDictionary) {
         card.append(element("p", "Разбор по введённой форме. Словарная запись не проверена.", "result-note"));
       }
