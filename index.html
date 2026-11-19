@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Определитель разновидностей III склонения латинских существительных для студентов медвузов.">
+  <title>Латынь · III склонение</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f8f7f3;
+      --surface: #fefdf9;
+      --ink: #20252d;
+      --muted: #535c69;
+      --line: #d8d9d6;
+      --accent: #3049a5;
+      --accent-hover: #243984;
+      --on-accent: #fafbff;
+      --tint: #ebeffa;
+      --wash: #e4eaf9;
+      --watermark: #ccd6f0;
+      --alert: #8a422b;
+      --alert-bg: #f7ece4;
+      --serif: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+      --sans: "Trebuchet MS", Verdana, sans-serif;
+      --out: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --paper: #191c26;
+      --surface: #232836;
+      --ink: #f1efe8;
+      --muted: #b6bfce;
+      --line: #41495b;
+      --accent: #b6c7ff;
+      --accent-hover: #d0daff;
+      --on-accent: #192653;
+      --tint: #2c3652;
+      --wash: #242e49;
+      --watermark: #38476d;
+      --alert: #ffbb9c;
+      --alert-bg: #3e2e31;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.55 var(--sans); }
+    h1, h2, h3, p, dl, dd { margin: 0; }
+    a { color: var(--accent); text-underline-offset: .2em; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    [hidden] { display: none !important; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .wrap { width: min(100% - 2 * clamp(1rem, 4.5vw, 3rem), 68rem); margin-inline: auto; }
+    .masthead { background: var(--paper); border-bottom: 1px solid var(--line); }
+    .nav { min-height: 4.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .brand { display: inline-flex; align-items: center; gap: .75rem; font-size: .93rem; font-weight: bold; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2.25rem;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--on-accent);
+      font: 1rem/1 var(--serif);
+    }
+    .theme {
+      display: grid;
+      place-items: center;
+      width: 2.75rem;
+      aspect-ratio: 1;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--ink);
+      background: none;
+    }
+    .theme svg, .submit svg { width: 1.15rem; height: 1.15rem; }
+    .theme .sun, [data-theme="dark"] .theme .moon { display: none; }
+    [data-theme="dark"] .theme .sun { display: block; }
+
+    .hero {
+      background: radial-gradient(ellipse at 77% 12%, var(--wash), transparent 72%), var(--paper);
+      padding-block: clamp(2.75rem, 8vw, 6.5rem) clamp(2rem, 5vw, 3.5rem);
+    }
+    .intro { display: grid; position: relative; }
+    .eyebrow {
+      color: var(--accent);
+      font-size: .75rem;
+      font-weight: bold;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    h1 {
+      font: normal clamp(2.125rem, 5.7vw, 4.5rem)/1.05 var(--serif);
+      letter-spacing: -.036em;
+      max-width: 14ch;
+      margin-top: .75rem;
+    }
+    h1 span { color: var(--accent); }
+    .intro-copy { margin-top: 1.25rem; max-width: 41ch; color: var(--muted); }
+    .folio { display: none; }
+    .finder { max-width: 45rem; margin-top: clamp(1.75rem, 4vw, 2.75rem); }
+    label { display: block; font-weight: bold; margin-bottom: .5rem; }
+    .search { display: grid; gap: .5rem; }
+    .field {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: .75rem;
+      min-height: 3.375rem;
+      padding-inline: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: .875rem;
+      color: var(--muted);
+    }
+    .field:focus-within { border-color: var(--accent); outline: 1px solid var(--accent); }
+    .field:has([aria-invalid="true"]) { border-color: var(--alert); }
+    .field svg { width: 1.25rem; height: 1.25rem; }
+    .field input { min-height: 3.25rem; width: 100%; padding: 0; border: 0; outline: none; background: none; color: var(--ink); }
+    .field input::placeholder { color: var(--muted); opacity: 1; }
+    .submit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .65rem;
+      min-height: 3.375rem;
+      padding: .55rem 1.25rem;
+      border: 1px solid transparent;
+      border-radius: .875rem;
+      color: var(--on-accent);
+      background: var(--accent);
+      font-weight: bold;
+    }
+    .submit, .theme, .example { transition: background-color 150ms var(--out), transform 150ms var(--out); }
+    @media (hover: hover) {
+      .submit:hover { background: var(--accent-hover); }
+      .theme:hover, .example:hover { background: var(--tint); }
+    }
+    .submit:active, .theme:active, .example:active { transform: scale(.97); }
+    .hint { margin-top: .625rem; font-size: .875rem; color: var(--muted); }
+    .hint i { white-space: nowrap; }
+    .examples { display: flex; align-items: center; flex-wrap: wrap; gap: .375rem; margin-top: 1.125rem; }
+    .examples > span { font-size: .875rem; color: var(--muted); margin-right: .375rem; }
+    .example {
+      min-height: 2.75rem;
+      padding: .25rem .875rem;
+      border: 1px solid var(--line);
+      border-radius: 99rem;
+      color: var(--ink);
+      background: var(--surface);
+      font: italic 1rem/1.1 var(--serif);
+    }
+    .example[aria-pressed="true"] { background: var(--tint); border-color: var(--accent); color: var(--accent); }
+
+    .results { max-width: 45rem; margin-top: 1.75rem; scroll-margin: 1rem; }
+    .results > * + * { margin-top: .75rem; }
+    .result, .notice {
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      background: var(--surface);
+      padding: clamp(1rem, 3vw, 1.75rem);
+      animation: appear 300ms var(--out) both;
+      overflow-wrap: anywhere;
+    }
+    @keyframes appear { from { opacity: 0; transform: translateY(6px); } }
+    .result h2 { font: italic clamp(1.8rem, 4.5vw, 2.75rem)/1.08 var(--serif); }
+    .result-header { display: flex; align-items: start; justify-content: space-between; gap: .5rem 1rem; flex-wrap: wrap; }
+    .result-meaning { color: var(--muted); margin-top: .25rem; }
+    .type {
+      display: inline-block;
+      padding: .35rem .65rem;
+      border-radius: .45rem;
+      background: var(--tint);
+      color: var(--accent);
+      font-size: .85rem;
+      font-weight: bold;
+    }
+    .type[data-kind="exception"], .type[data-kind="uncertain"] { background: var(--alert-bg); color: var(--alert); }
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+      gap: .5rem 1rem;
+      margin-top: 1.125rem;
+      padding-block: .75rem;
+      border-block: 1px solid var(--line);
+    }
+    .facts dt { color: var(--muted); font-size: .75rem; }
+    .facts dd { margin-top: .125rem; }
+    .reason { padding-inline-start: 1.375rem; margin: .875rem 0 0; }
+    .reason li + li { margin-top: .25rem; }
+    .reason li::marker { color: var(--accent); }
+    .notice h2 { font-size: 1rem; }
+    .notice p, .result-note { margin-top: .4rem; color: var(--muted); font-size: .9rem; }
+    .result-note { margin-top: .75rem; }
+
+    .reference { border-top: 1px solid var(--line); }
+    .reference summary {
+      min-height: 3rem;
+      padding-block: .75rem;
+      cursor: pointer;
+      color: var(--accent);
+      font-weight: bold;
+    }
+    .reference .guide { max-width: 60ch; color: var(--muted); font-size: .875rem; }
+    .guide ul { padding-inline-start: 1.375rem; margin: .5rem 0 .75rem; }
+    .guide li + li { margin-top: .375rem; }
+    .guide strong { color: var(--ink); }
+    .foot { padding-block: .75rem 1.75rem; font-size: .8rem; color: var(--muted); }
+
+    @media (min-width: 34rem) {
+      .search { grid-template-columns: minmax(0, 1fr) auto; }
+    }
+    @media (min-width: 52rem) {
+      .intro { grid-template-columns: 3fr 1fr; align-items: center; gap: 2.5rem; }
+      .folio {
+        display: grid;
+        place-items: center;
+        color: var(--watermark);
+        font: normal clamp(8rem, 16vw, 13rem)/.82 var(--serif);
+        letter-spacing: -.07em;
+        border-left: 1px solid var(--line);
+        padding-block: .625rem;
+        user-select: none;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap nav">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">III</span> Латынь · III склонение</div>
+      <button class="theme" id="theme" type="button" aria-label="Тёмная тема" aria-pressed="false" hidden>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20.5 15.1A8.4 8.4 0 0 1 8.9 3.5a8.8 8.8 0 1 0 11.6 11.6Z" stroke-linejoin="round"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="title">
+      <div class="wrap">
+        <div class="intro">
+          <div>
+            <p class="eyebrow">Медицинская латынь</p>
+            <h1 id="title">Разновидности <span>III склонения</span></h1>
+            <p class="intro-copy">Введите латинское существительное в именительном падеже. Получите тип склонения и разбор по шагам.</p>
+          </div>
+          <div class="folio" aria-hidden="true">III</div>
+        </div>
+
+        <form class="finder" id="finder" novalidate>
+          <label for="word">Латинское существительное</label>
+          <div class="search">
+            <div class="field">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4" stroke-linecap="round"/></svg>
+              <input id="word" type="text" placeholder="например, foramen" maxlength="120" autocapitalize="off" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-describedby="hint" required>
+            </div>
+            <button class="submit" type="submit">
+              Определить
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <p class="hint" id="hint">Можно ввести словарную форму: <i lang="la">cor, cordis n</i>.</p>
+          <div class="examples">
+            <span>Попробуйте:</span>
+            <button class="example" type="button" data-word="animal" lang="la" aria-pressed="false">animal</button>
+            <button class="example" type="button" data-word="pubes" lang="la" aria-pressed="false">pubes</button>
+            <button class="example" type="button" data-word="dens" lang="la" aria-pressed="false">dens</button>
+            <button class="example" type="button" data-word="index" lang="la" aria-pressed="false">index</button>
+            <button class="example" type="button" data-word="larynx" lang="la" aria-pressed="false">larynx</button>
+          </div>
+        </form>
+        <noscript><p class="hint">Для разбора слов включите JavaScript.</p></noscript>
+        <p class="sr-only" id="announcement" role="status"></p>
+        <div class="results" id="results" hidden></div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <details class="reference">
+        <summary>Алгоритм определения</summary>
+        <div class="guide">
+          <p>Проверьте, что Gen. sing. оканчивается на <b lang="la">-is</b>, и уберите это окончание, чтобы получить основу.</p>
+          <ul>
+            <li><strong>Гласный:</strong> средний род, Nom. sing. на <i lang="la">-e, -al, -ar</i>.</li>
+            <li><strong>Смешанный Б:</strong> если не гласный, проверьте, одинаково ли число слогов и оканчивается ли Nom. sing. на <i lang="la">-is</i> или <i lang="la">-es</i>.</li>
+            <li><strong>Согласный или смешанный А:</strong> в остальных случаях смотрите на основу. Одна согласная в конце — согласный, две или больше — смешанный А.</li>
+            <li><strong>Исключение:</strong> у некоторых слов форма не совпадает с ожидаемой. Например, в учебнике Чернявского для <i lang="la">larynx</i> указано окончание <i lang="la">-um</i>, хотя основа заканчивается на <i lang="la">-ng</i>.</li>
+          </ul>
+          <p>А и Б обозначены как в учебном примере. Здесь отмечены исключения по склонению, а не по роду. Для незнакомых слов разбор по правилу не заменяет проверку по словарю.</p>
+          <p class="hint">Источники: <a href="https://dmitrygrachov.github.io/Libra/#how">учебная схема А/Б</a>, <a href="https://studfile.net/preview/21458643/page:16/">Чернявский, § 101</a>, <a href="https://studfile.net/preview/535623/">Плитниченко и Бондаренко</a>, <a href="https://dcc.dickinson.edu/grammar/latin/3rd-declension-summary-i-stem-forms">Allen &amp; Greenough, § 78</a>.</p>
+        </div>
+      </details>
+      <footer class="foot">Локальный словарь · работает без интернета</footer>
+    </div>
+  </main>
+
+  <script>
+    // A study selection, not the complete vocabulary of either textbook.
+    const dictionary = new Map();
+    const lexicon = `
+abdomen abdominis n живот
+abductor abductoris m отводящая мышца
+adductor adductoris m приводящая мышца
+aer aeris m воздух
+anamnesis anamnesis f анамнез
+analysis analysis f анализ
+animal animalis n животное
+apex apicis m верхушка
+apis apis f пчела
+aponeurosis aponeurosis f апоневроз
+appendix appendicis f придаток, аппендикс
+arcus arcus m дуга
+ars artis f искусство, ремесло
+articulatio articulationis f сустав
+atlas atlantis m атлант, первый шейный позвонок
+auris auris f ухо
+avis avis f птица
+axis axis m ось, второй шейный позвонок
+basis basis f основание
+bifurcatio bifurcationis f раздвоение
+bilis bilis f жёлчь
+cadaver cadaveris n труп
+calcar calcaris n шпора
+calix calicis m чашечка
+calyx calycis m чашечка
+calx calcis f пятка
+canalis canalis m канал
+canis canis mf собака
+caput capitis n голова, головка
+caro carnis f мясо, плоть
+cartilago cartilaginis f хрящ
+cavitas cavitatis f полость
+cervix cervicis f шея, шейка
+chiasma chiasmatis n перекрёст
+civitas civitatis f гражданская община, государство
+coccyx coccygis m копчик
+collum colli n шея
+compages compagis f соединение
+constrictor constrictoris m сжиматель
+cor cordis n сердце
+corpus corporis n тело
+cortex corticis m кора
+crisis crisis f кризис
+crus cruris n голень, ножка
+cuspis cuspidis f остриё, створка
+cutis cutis f кожа
+declive declivis n скат
+dens dentis m зуб
+depressor depressoris m опускающая мышца
+diagnosis diagnosis f диагноз
+diaphragma diaphragmatis n диафрагма
+dolor doloris m боль
+dosis dosis f доза
+ductus ductus m проток
+epidermis epidermidis f эпидермис
+epiglottis epiglottidis f надгортанник
+extensor extensoris m разгибатель
+extremitas extremitatis f конец, конечность
+facies faciei f поверхность, лицо
+falx falcis f серп
+fascia fasciae f фасция
+fauces faucium f зев
+febris febris f лихорадка
+femur femoris n бедро, бедренная кость
+flexio flexionis f сгибание
+flexor flexoris m сгибатель
+flos floris m цветок
+flumen fluminis n река
+foramen foraminis n отверстие
+fornix fornicis m свод
+frater fratris m брат
+frons frontis f лоб
+gaster gastris f желудок
+genu genus n колено
+genus generis n род
+glans glandis f головка
+glomus glomeris n клубочек
+glottis glottidis f голосовая щель
+hallux hallucis m большой палец стопы
+hepar hepatis n печень
+herpes herpetis m герпес
+homo hominis m человек
+humor humoris m жидкость
+hypophysis hypophysis f гипофиз
+ile ilis n нижняя часть живота
+impressio impressionis f вдавление
+incus incudis f наковальня (слуховая косточка)
+index indicis m указательный палец
+inguen inguinis n пах
+iris iridis f радужка
+iuvenis iuvenis mf юноша, девушка
+juvenis juvenis mf юноша, девушка
+lac lactis n молоко
+larynx laryngis m гортань
+latus lateris n бок, сторона
+lens lentis f хрусталик
+levator levatoris m подниматель
+lien lienis m селезёнка
+limen liminis n порог
+liquor liquoris m жидкость
+longitudo longitudinis f длина
+magnitudo magnitudinis f величина
+manus manus f кисть, рука
+mare maris n море
+margo marginis m край
+masseter masseteris m жевательная мышца
+mater matris f мать; мозговая оболочка в анатомических терминах
+meninx meningis f мозговая оболочка
+mensis mensis m месяц
+mons montis m возвышение, гора
+mors mortis f смерть
+mus muris mf мышь
+musculus musculi m мышца
+naris naris f ноздря
+nomen nominis n имя, название
+nux nucis f орех
+occiput occipitis n затылок
+oculus oculi m глаз
+oedema oedematis n отёк
+origo originis f начало
+os oris n рот
+os ossis n кость
+ovis ovis f овца
+pancreas pancreatis n поджелудочная железа
+paries parietis m стенка
+pars partis f часть
+pater patris m отец
+pax pacis f мир
+pecten pectinis m гребень
+pectus pectoris n грудь
+pelvis pelvis f таз, лоханка
+penis penis m половой член
+pes pedis m стопа
+phalanx phalangis f фаланга
+pharynx pharyngis m глотка
+pix picis f смола
+plexus plexus m сплетение
+pollex pollicis m большой палец кисти
+pons pontis m мост
+prognosis prognosis f прогноз
+pubes pubis f лобок
+pubis pubis f лобок
+pulmo pulmonis m лёгкое
+pulvinar pulvinaris n подушка
+pus puris n гной
+pyramis pyramidis f пирамида
+radix radicis f корень
+regio regionis f область
+ren renis m почка
+rete retis n сеть
+rex regis m царь
+rosa rosae f роза
+rotatio rotationis f вращение
+salus salutis f здоровье
+sanguis sanguinis m кровь
+sedes sedis f место, сиденье
+semen seminis n семя
+senex senis m старик
+series seriei f ряд
+sitis sitis f жажда
+spina spinae f ость, позвоночник
+stapes stapedis m стремя
+stroma stromatis n строма
+sulcus sulci m борозда
+supinatio supinationis f супинация
+symphysis symphysis f симфиз, сращение
+synchondrosis synchondrosis f синхондроз
+systema systematis n система
+tabes tabis f истощение
+tegmen tegminis n покрышка
+tempus temporis n время; висок
+tendo tendinis m сухожилие
+testis testis m яичко
+thenar thenaris n тенар, возвышение большого пальца
+thorax thoracis m грудная клетка
+trochanter trochanteris m вертел
+tuber tuberis n бугор
+tuberositas tuberositatis f бугристость
+tussis tussis f кашель
+unguis unguis m ноготь
+urbs urbis f город
+ureter ureteris m мочеточник
+vas vasis n сосуд
+vena venae f вена
+venter ventris m брюшко
+vertex verticis m темя, вершина
+viscus visceris n внутренний орган
+vomer vomeris m сошник
+vox vocis f голос
+zygoma zygomatis n скуловая кость`;
+
+    const otherDeclensions = new Map(Object.entries({
+      arcus: "IV", collum: "II", ductus: "IV", facies: "V", fascia: "I", genu: "IV",
+      manus: "IV", musculus: "II", oculus: "II", plexus: "IV", rosa: "I", series: "V",
+      spina: "I", sulcus: "II", vena: "I",
+    }));
+
+    for (const row of lexicon.trim().split("\n")) {
+      const [, nom, gen, gender, meaning] = row.match(/^(\w+) (\w+) (\w+) (.+)$/);
+      const entry = { nom, gen, gender, meaning, declension: otherDeclensions.get(nom) ?? "III" };
+      if (!dictionary.has(nom)) dictionary.set(nom, []);
+      dictionary.get(nom).push(entry);
+    }
+
+    const types = {
+      vocalic: "Гласный",
+      mixedA: "Смешанный А",
+      mixedB: "Смешанный Б",
+      consonant: "Согласный",
+      exception: "Исключение",
+      uncertain: "Тип не определён",
+      other: "Не III склонение",
+      plural: "Только множественное число",
+    };
+    const genderNames = { m: "мужской", f: "женский", n: "средний", mf: "мужской / женский" };
+
+    // These are exceptions to the declension rules, not to gender rules.
+    const exceptions = new Map(Object.entries({
+      "canis/canis": "Хотя формы равносложные и Nom. sing. на -is, в Gen. pl. — canum (согласный тип).",
+      "caro/carnis": "Формы равносложные, но Nom. sing. не на -is/-es. В Gen. pl. встречаются carnum и carnium.",
+      "frater/fratris": "Формы равносложные и основа на две согласные, но в Gen. pl. — fratrum (согласный тип).",
+      "gaster/gastris": "Формы равносложные и основа на две согласные. В анатомической латыни Gen. pl. — gastrum.",
+      "hepar/hepatis": "Хотя hepar среднего рода и оканчивается на -ar, в Gen. pl. — hepatum (согласный тип).",
+      "iuvenis/iuvenis": "Хотя формы равносложные и Nom. sing. на -is, в Gen. pl. — iuvenum (согласный тип).",
+      "juvenis/juvenis": "Хотя формы равносложные и Nom. sing. на -is, в Gen. pl. — juvenum (согласный тип).",
+      "larynx/laryngis": "Хотя основа laryng- оканчивается на -ng, по Чернявскому это греческое слово имеет окончание -um в Gen. pl.: laryngum.",
+      "mater/matris": "Формы равносложные и основа на две согласные, но в Gen. pl. — matrum (согласный тип).",
+      "meninx/meningis": "Хотя основа mening- оканчивается на -ng, по Чернявскому это греческое слово имеет окончание -um в Gen. pl.: meningum.",
+      "mensis/mensis": "По общему правилу это смешанный Б: mensium. В классической латыни встречается и mensum.",
+      "pater/patris": "Формы равносложные и основа на две согласные, но в Gen. pl. — patrum (согласный тип).",
+      "phalanx/phalangis": "Хотя основа phalang- оканчивается на -ng, по Чернявскому это греческое слово имеет окончание -um в Gen. pl.: phalangum.",
+      "pharynx/pharyngis": "Хотя основа pharyng- оканчивается на -ng, по Чернявскому это греческое слово имеет окончание -um в Gen. pl.: pharyngum.",
+      "sedes/sedis": "Хотя формы равносложные и Nom. sing. на -es, в классической латыни обычна форма sedum в Gen. pl.",
+      "senex/senis": "Формы равносложные, но Gen. pl. имеет окончание согласного типа: senum.",
+      "vas/vasis": "В единственном числе III склонение, во множественном — II: Nom. pl. vasa, Gen. pl. vasorum.",
+      "venter/ventris": "Формы равносложные, хотя основа оканчивается на две согласные. В Gen. pl. встречаются ventrum и ventrium.",
+    }));
+    const pronunciation = new Map([["aer", "aër"], ["aeris", "aëris"]]);
+
+    function normalize(value) {
+      return value.trim().toLowerCase().normalize("NFD")
+        .replace(/\p{M}/gu, "").replaceAll("æ", "ae").replaceAll("œ", "oe");
+    }
+
+    function syllables(word) {
+      const pronounced = (pronunciation.get(normalize(word)) ?? word).toLowerCase().normalize("NFD")
+        .replace(/\u0308/g, "·").replace(/\p{M}/gu, "").replaceAll("æ", "ae").replaceAll("œ", "oe")
+        .replace(/([aeiouy])·/g, "·$1").replace(/qu(?=[aeiouy])/g, "q");
+      return (pronounced.match(/ae|oe|au|eu|[aeiouy]/g) ?? []).length;
+    }
+
+    function classify({ nom, gen, gender, declension = "III", rawNom = nom, rawGen = gen }) {
+      if (nom === "fauces" && gen === "faucium") {
+        return { kind: "plural", steps: ["Fauces — форма Nom. pl., а faucium — Gen. pl. У этого слова в данном значении нет единственного числа."] };
+      }
+      if (declension !== "III" || !gen.endsWith("is")) {
+        const known = declension !== "III";
+        return {
+          kind: "other",
+          steps: [known
+            ? `В словаре это слово относится к ${declension} склонению.`
+            : `Форма ${gen} не имеет окончания -is, характерного для Gen. sing. III склонения. Проверьте словарную форму.`],
+        };
+      }
+
+      const stem = gen.slice(0, -2);
+      const nomCount = syllables(rawNom);
+      const genCount = syllables(rawGen);
+      const vowelEnding = nom.match(/(e|al|ar)$/)?.[0];
+      const mixedEnding = nom.match(/(is|es)$/)?.[0];
+      const cluster = stem.match(/[^aeiouy]+$/)?.[0] ?? "";
+      // Greek digraphs count as one consonant; x represents two.
+      const consonantCount = (cluster.match(/ch|ph|th|rh|./g) ?? [])
+        .reduce((count, consonant) => count + (consonant === "x" ? 2 : 1), 0);
+      const steps = [`${gen} оканчивается на -is. Убираем -is: основа ${stem}-.`];
+      let kind;
+      if (gender === "n" && vowelEnding) {
+        kind = "vocalic";
+        steps.push(`Средний род и окончание -${vowelEnding} в Nom. sing. → по правилу это гласный тип.`);
+      } else {
+        steps.push(gender === "n"
+          ? "Средний род, но Nom. sing. не оканчивается на -e, -al или -ar: гласный тип не подходит."
+          : "Род не средний: гласный тип не подходит.");
+        const syllableCounts = `Число слогов: Nom. sing. — ${nomCount}, Gen. sing. — ${genCount}.`;
+        if (nomCount === genCount && mixedEnding) {
+          kind = "mixedB";
+          steps.push(`${syllableCounts} Слогов поровну и Nom. sing. на -${mixedEnding} → смешанный Б.`);
+        } else {
+          steps.push(`${syllableCounts} ${nomCount !== genCount
+            ? "Число слогов разное."
+            : "Слогов поровну, но Nom. sing. не оканчивается на -is или -es."} Смешанный Б не подходит.`);
+          if (consonantCount === 1) {
+            kind = "consonant";
+            steps.push(`Основа оканчивается на одну согласную (-${cluster}) → согласный тип.`);
+          } else if (consonantCount >= 2) {
+            kind = "mixedA";
+            steps.push(`Основа оканчивается на несколько согласных (-${cluster}) → смешанный А.`);
+          } else {
+            kind = "uncertain";
+            steps.push("На конце основы нет согласной. Сверьте словарную форму.");
+          }
+        }
+      }
+      const exception = exceptions.get(`${nom}/${gen}`);
+      if (exception) {
+        steps.push(`Исключение из правила. ${exception}`);
+        kind = "exception";
+      }
+      return { kind, stem, steps };
+    }
+
+    function searchWord(value) {
+      const text = value.trim();
+      if (!text) return { error: "Введите слово", detail: "Например, foramen или cor, cordis n." };
+      // Accept commas or spaces and optional dictionary dots, but not phrases.
+      const parts = text.match(/^([\p{Script=Latin}\p{M}]+)(?:\s*(?:,\s*|\s+)([-–−]?[\p{Script=Latin}\p{M}]+)(?:\s*(?:,\s*|\s+)([mfn])\.?)?)?$/iu);
+      const latin = value => /^[a-z]+$/.test(value) && /[aeiouy]/.test(value);
+      if (!parts || !latin(normalize(parts[1])) || (parts[2] && !latin(normalize(parts[2]).replace(/^[-–−]/, "")))) {
+        return { error: "Проверьте написание", detail: "Введите одно слово латиницей или словарную форму: cor, cordis n." };
+      }
+      const nom = normalize(parts[1]);
+      const gen = parts[2] && normalize(parts[2]).replace(/^[-–−]/, "");
+      const gender = parts[3]?.toLowerCase();
+      const entries = dictionary.get(nom);
+      if (entries) {
+        const matches = entries.filter(entry => {
+          const prefixLength = entry.gen.length - (gen?.length ?? 0);
+          const abbreviated = gen && prefixLength > 0 && entry.gen.endsWith(gen) &&
+            nom.startsWith(entry.gen.slice(0, prefixLength));
+          return (!gen || entry.gen === gen || abbreviated) && (!gender || entry.gender.includes(gender));
+        });
+        if (!matches.length) {
+          return { error: "Формы не совпали со словарём", detail: `Проверьте словарную форму: ${entries.map(e => `${e.nom}, ${e.gen} ${e.gender}`).join("; ")}.` };
+        }
+        return { matches, fromDictionary: true };
+      }
+      if (!gen || !gender || /^[-–−]/.test(parts[2]) || gen.length <= 2 || nom[0] !== gen[0]) {
+        return { error: "Нужна полная словарная форма", detail: "Слова нет во встроенном словаре. Добавьте Gen. sing. без сокращения и род (m, f или n), как в cor, cordis n." };
+      }
+      return {
+        matches: [{ nom, gen, gender, rawNom: parts[1], rawGen: parts[2] }],
+        fromDictionary: false,
+      };
+    }
+
+    const form = document.querySelector("#finder");
+    const input = document.querySelector("#word");
+    const results = document.querySelector("#results");
+    const announcement = document.querySelector("#announcement");
+    const examples = [...form.querySelectorAll("[data-word]")];
+    const theme = document.querySelector("#theme");
+
+    function setTheme(dark) {
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+      theme.setAttribute("aria-pressed", String(dark));
+    }
+    try {
+      setTheme(localStorage.getItem("latin-declension-theme") === "dark");
+    } catch {
+      setTheme(false);
+    }
+    theme.hidden = false;
+    theme.addEventListener("click", () => {
+      const dark = theme.getAttribute("aria-pressed") !== "true";
+      setTheme(dark);
+      try { localStorage.setItem("latin-declension-theme", dark ? "dark" : "light"); } catch { /* file:// storage may be disabled */ }
+    });
+
+    function element(tag, text, className) {
+      const node = document.createElement(tag);
+      if (text) node.textContent = text;
+      if (className) node.className = className;
+      return node;
+    }
+
+    function renderEntry(entry, result, fromDictionary) {
+      const card = element("article", "", "result");
+      const header = element("div", "", "result-header");
+      const identity = element("div");
+      const word = element("h2", entry.nom);
+      word.lang = "la";
+      identity.append(word);
+      if (entry.meaning) identity.append(element("p", entry.meaning, "result-meaning"));
+      const badge = element("span", types[result.kind], "type");
+      badge.dataset.kind = result.kind;
+      header.append(identity, badge);
+      card.append(header);
+
+      const facts = element("dl", "", "facts");
+      const plural = result.kind === "plural";
+      const items = [
+        [plural ? "Nom. pl." : "Nom. sing.", entry.nom, true],
+        [plural ? "Gen. pl." : "Gen. sing.", entry.gen, true],
+        ["Род", genderNames[entry.gender], false],
+      ];
+      if (result.stem) items.push(["Основа", `${result.stem}-`, true]);
+      for (const [label, value, latin] of items) {
+        const fact = element("div");
+        const description = element("dd", value);
+        if (latin) description.lang = "la";
+        fact.append(element("dt", label), description);
+        facts.append(fact);
+      }
+      const reason = element("ol", "", "reason");
+      for (const step of result.steps) reason.append(element("li", step));
+      card.append(facts, reason);
+      if (!fromDictionary) {
+        card.append(element("p", "Разбор по введённой форме. Словарная запись не проверена.", "result-note"));
+      }
+      return card;
+    }
+
+    function updateExamples(selected) {
+      for (const example of examples) {
+        example.setAttribute("aria-pressed", String(example.dataset.word === selected));
+      }
+    }
+
+    function submit() {
+      const found = searchWord(input.value);
+      results.replaceChildren();
+      results.hidden = false;
+      if (found.error) {
+        const notice = element("div", "", "notice");
+        const detail = element("p", found.detail);
+        detail.id = "word-error";
+        notice.append(element("h2", found.error), detail);
+        results.append(notice);
+        input.setAttribute("aria-invalid", "true");
+        input.setAttribute("aria-describedby", "hint word-error");
+        announcement.textContent = `${found.error}. ${found.detail}`;
+        updateExamples(null);
+      } else {
+        input.removeAttribute("aria-invalid");
+        input.setAttribute("aria-describedby", "hint");
+        const messages = [];
+        for (const entry of found.matches) {
+          const result = classify(entry);
+          results.append(renderEntry(entry, result, found.fromDictionary));
+          messages.push(`${entry.nom}, ${entry.gen}: ${types[result.kind]}.`);
+        }
+        announcement.textContent = messages.join(" ");
+        updateExamples(found.matches[0].nom);
+      }
+      if (results.getBoundingClientRect().top + 52 > window.innerHeight) {
+        results.scrollIntoView({ block: "start" });
+      }
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      submit();
+    });
+    input.addEventListener("input", () => {
+      results.hidden = true;
+      announcement.textContent = "";
+      input.removeAttribute("aria-invalid");
+      input.setAttribute("aria-describedby", "hint");
+      updateExamples(null);
+    });
+    for (const example of examples) {
+      example.addEventListener("click", () => {
+        input.blur();
+        input.value = example.dataset.word;
+        submit();
+      });
+    }
+  </script>
+</body>
+</html>
