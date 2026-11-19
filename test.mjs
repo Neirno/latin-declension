@@ -79,6 +79,14 @@ test('некорректные и неполные запросы', () => {
   }
 });
 
+test('во внешний поиск идут только незнакомые одиночные слова', () => {
+  assert.equal(searchWord(' ŪLCUS ').remote, 'ulcus');
+  assert.equal(searchWord('ulcus, ulceris n').remote, undefined);
+  assert.equal(searchWord('ulcus, ulceris').remote, null);
+  assert.equal(searchWord('foramen').remote, undefined);
+  assert.equal(searchWord('не латынь').remote, undefined);
+});
+
 test('каждая встроенная форма находится и разбирается однозначно', () => {
   for (const entries of dictionary.values()) {
     for (const entry of entries) {

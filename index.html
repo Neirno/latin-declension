@@ -205,7 +205,7 @@
     .notice p, .result-note { margin-top: .4rem; color: var(--muted); font-size: .9rem; }
     .result-note { margin-top: .75rem; }
 
-    .reference { border-top: 1px solid var(--line); }
+    .reference { border-top: 1px solid var(--line); padding-bottom: 1.5rem; }
     .reference summary {
       min-height: 3rem;
       padding-block: .75rem;
@@ -217,7 +217,6 @@
     .guide ul { padding-inline-start: 1.375rem; margin: .5rem 0 .75rem; }
     .guide li + li { margin-top: .375rem; }
     .guide strong { color: var(--ink); }
-    .foot { padding-block: .75rem 1.75rem; font-size: .8rem; color: var(--muted); }
 
     @media (min-width: 34rem) {
       .search { grid-template-columns: minmax(0, 1fr) auto; }
@@ -274,7 +273,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
           </div>
-          <p class="hint" id="hint">Можно ввести словарную форму: <i lang="la">cor, cordis n</i>.</p>
+          <p class="hint" id="hint">Можно ввести словарную форму: <i lang="la">cor, cordis n</i>. Незнакомые слова ищем в Wiktionary.</p>
           <div class="examples">
             <span>Попробуйте:</span>
             <button class="example" type="button" data-word="animal" lang="la" aria-pressed="false">animal</button>
@@ -305,7 +304,6 @@
           <p class="hint">Источники: <a href="https://dmitrygrachov.github.io/Libra/#how">учебная схема А/Б</a>, <a href="https://studfile.net/preview/21458643/page:16/">Чернявский, § 101</a>, <a href="https://studfile.net/preview/535623/">Плитниченко и Бондаренко</a>, <a href="https://dcc.dickinson.edu/grammar/latin/3rd-declension-summary-i-stem-forms">Allen &amp; Greenough, § 78</a>.</p>
         </div>
       </details>
-      <footer class="foot">Локальный словарь · работает без интернета</footer>
     </div>
   </main>
 
@@ -650,12 +648,73 @@ zygoma zygomatis n скуловая кость`;
         return { matches, fromDictionary: true };
       }
       if (!gen || !gender || /^[-–−]/.test(parts[2]) || gen.length <= 2 || nom[0] !== gen[0]) {
-        return { error: "Нужна полная словарная форма", detail: "Слова нет во встроенном словаре. Добавьте Gen. sing. без сокращения и род (m, f или n), как в cor, cordis n." };
+        return {
+          error: "Нужна полная словарная форма",
+          detail: "Добавьте Gen. sing. без сокращения и род (m, f или n), как в cor, cordis n.",
+          remote: !gen && nom.length <= 48 ? nom : null,
+        };
       }
       return {
         matches: [{ nom, gen, gender, rawNom: parts[1], rawGen: parts[2] }],
         fromDictionary: false,
       };
+    }
+
+    function parseWiktionary(html, nom) {
+      const template = document.createElement("template");
+      // Untrusted HTML stays in an inert template; only validated plain forms are used.
+      template.innerHTML = html;
+      const entries = new Map();
+      let latin = false;
+      let noun = false;
+      for (const node of template.content.querySelectorAll("h2, h3, h4, h5, h6, .headword-line")) {
+        if (node.tagName === "H2") {
+          latin = node.id === "Latin" || node.textContent.trim() === "Latin";
+          noun = false;
+        } else if (/^H[3-6]$/.test(node.tagName)) {
+          noun = latin && node.textContent.trim() === "Noun";
+        } else if (noun) {
+          const rawNom = node.querySelector('.headword[lang="la"]')?.textContent.trim();
+          const codes = [...node.querySelectorAll(".gender abbr")].map(el => el.textContent.trim());
+          const gender = [...new Set(codes)].sort().reverse().join("");
+          if (!rawNom || normalize(rawNom) !== nom || !Object.hasOwn(genderNames, gender)) continue;
+
+          const marker = [...node.querySelectorAll("i")].find(el => el.textContent.trim() === "genitive");
+          for (let form = marker?.nextElementSibling; form?.matches('[lang="la"]');) {
+            const rawGen = form.textContent.trim();
+            const gen = normalize(rawGen);
+            if (/^[a-z]{3,48}$/.test(gen) && /[aeiouy]/.test(gen)) {
+              entries.set(`${gen}/${gender}`, { nom, gen, gender, rawNom, rawGen, source: "wiktionary" });
+            }
+            const next = form.nextElementSibling;
+            form = next?.matches("i") && next.textContent.trim() === "or" ? next.nextElementSibling : null;
+          }
+        }
+      }
+      return [...entries.values()];
+    }
+
+    const externalEntries = new Map();
+
+    async function lookupWiktionary(nom, signal) {
+      if (externalEntries.has(nom)) return externalEntries.get(nom);
+      const url = new URL("https://en.wiktionary.org/w/api.php");
+      url.search = new URLSearchParams({
+        action: "parse", page: nom, prop: "text", format: "json", formatversion: "2",
+        origin: "*", disableeditsection: "1", redirects: "1",
+      });
+      const response = await fetch(url, {
+        signal, credentials: "omit", referrerPolicy: "no-referrer",
+        headers: { "Api-User-Agent": "LatinDeclension/1.1 (https://github.com/Neirno/latin-declension)" },
+      });
+      if (!response.ok) throw new Error(`Wiktionary: HTTP ${response.status}`);
+      const payload = await response.json();
+      if (payload.error?.code === "missingtitle") return [];
+      if (typeof payload.parse?.text !== "string") throw new Error("Wiktionary: no parsed page");
+      const matches = parseWiktionary(payload.parse.text, nom);
+      if (externalEntries.size >= 100) externalEntries.clear();
+      externalEntries.set(nom, matches);
+      return matches;
     }
 
     const form = document.querySelector("#finder");
@@ -719,7 +778,15 @@ zygoma zygomatis n скуловая кость`;
       const reason = element("ol", "", "reason");
       for (const step of result.steps) reason.append(element("li", step));
       card.append(facts, reason);
-      if (!fromDictionary) {
+      if (entry.source === "wiktionary") {
+        const note = element("p", "Словарная форма: ", "result-note");
+        const source = element("a", "Wiktionary");
+        source.href = `https://en.wiktionary.org/wiki/${encodeURIComponent(entry.nom)}#Latin`;
+        source.target = "_blank";
+        source.rel = "noopener noreferrer";
+        note.append(source, ". Тип определён по учебным правилам; источник не проверяет исключения по этой схеме.");
+        card.append(note);
+      } else if (!fromDictionary) {
         card.append(element("p", "Разбор по введённой форме. Словарная запись не проверена.", "result-note"));
       }
       return card;
@@ -731,10 +798,20 @@ zygoma zygomatis n скуловая кость`;
       }
     }
 
-    function submit() {
-      const found = searchWord(input.value);
+    let pendingLookup;
+
+    function cancelLookup() {
+      pendingLookup?.controller.abort();
+      pendingLookup = null;
+    }
+
+    function render(found) {
       results.replaceChildren();
       results.hidden = false;
+      if (found.loading) results.setAttribute("aria-busy", "true");
+      else results.removeAttribute("aria-busy");
+      input.removeAttribute("aria-invalid");
+      input.setAttribute("aria-describedby", "hint");
       if (found.error) {
         const notice = element("div", "", "notice");
         const detail = element("p", found.detail);
@@ -745,9 +822,11 @@ zygoma zygomatis n скуловая кость`;
         input.setAttribute("aria-describedby", "hint word-error");
         announcement.textContent = `${found.error}. ${found.detail}`;
         updateExamples(null);
+      } else if (found.loading) {
+        results.append(element("p", "Ищем словарную форму в Wiktionary…", "notice"));
+        announcement.textContent = "Ищем словарную форму в Wiktionary.";
+        updateExamples(null);
       } else {
-        input.removeAttribute("aria-invalid");
-        input.setAttribute("aria-describedby", "hint");
         const messages = [];
         for (const entry of found.matches) {
           const result = classify(entry);
@@ -762,12 +841,43 @@ zygoma zygomatis n скуловая кость`;
       }
     }
 
+    async function submit() {
+      const found = searchWord(input.value);
+      if (found.remote && pendingLookup?.nom === found.remote) return;
+      cancelLookup();
+      if (!found.remote) {
+        render(found);
+        return;
+      }
+
+      const lookup = { nom: found.remote, controller: new AbortController() };
+      pendingLookup = lookup;
+      render({ loading: true });
+      const timeout = setTimeout(() => lookup.controller.abort(), 7000);
+      let result;
+      try {
+        const matches = await lookupWiktionary(lookup.nom, lookup.controller.signal);
+        result = matches.length
+          ? { matches, fromDictionary: true }
+          : { ...found, detail: `В Wiktionary не нашлось подходящей записи. ${found.detail}` };
+      } catch {
+        result = { ...found, error: "Wiktionary недоступен", detail: found.detail };
+      } finally {
+        clearTimeout(timeout);
+      }
+      if (pendingLookup !== lookup) return;
+      pendingLookup = null;
+      render(result);
+    }
+
     form.addEventListener("submit", event => {
       event.preventDefault();
       submit();
     });
     input.addEventListener("input", () => {
+      cancelLookup();
       results.hidden = true;
+      results.removeAttribute("aria-busy");
       announcement.textContent = "";
       input.removeAttribute("aria-invalid");
       input.setAttribute("aria-describedby", "hint");
